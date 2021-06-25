@@ -24,7 +24,7 @@ class deveLog {
         fclose($logfile);
     }
 
-    public static function sendLog($fileName, $portal, $arData) {
+    public static function sendLog($handler, $fileName, $portal, $arData) {
 
         /*
         *   Send log to my server.
@@ -33,7 +33,7 @@ class deveLog {
         *   $arData - data for loging
         */
 
-        $url = 'https://kibra24.ru/b24/logs/writelog.php';
+        $url = $handler;
         $sPostFields = http_build_query([
             'FILE_NAME' => $fileName,
             'PORTAL' => $portal,

@@ -1,0 +1,45 @@
+-----------------------------------------------------------------------------
+2021-06-25 15:07:03
+Array
+(
+    [HTTP_HOST] => log
+    [HTTP_USER_AGENT] => Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0
+    [HTTP_ACCEPT] => text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+    [HTTP_ACCEPT_LANGUAGE] => ru-RU,ru;q=0.8,en-US;q=0.5,en;q=0.3
+    [HTTP_ACCEPT_ENCODING] => gzip, deflate
+    [HTTP_CONNECTION] => keep-alive
+    [HTTP_UPGRADE_INSECURE_REQUESTS] => 1
+    [PATH] => d:\ospanel\modules\php\PHP_7.3-x64\ext;d:\ospanel\modules\php\PHP_7.3-x64\pear;d:\ospanel\modules\php\PHP_7.3-x64\pear\bin;d:\ospanel\modules\php\PHP_7.3-x64;d:\ospanel\modules\wget\bin;d:\ospanel\modules\database\MySQL-5.6\bin;d:\ospanel\modules\http\Apache_2.4-PHP_7.2-7.3-x64\bin;d:\ospanel\modules\http\Apache_2.4-PHP_7.2-7.3-x64;C:\Windows\system32;C:\Windows;C:\Windows\system32\Wbem;C:\Windows\SysWOW64
+    [SystemRoot] => C:\Windows
+    [COMSPEC] => C:\Windows\system32\cmd.exe
+    [PATHEXT] => .COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC
+    [WINDIR] => C:\Windows
+    [SERVER_SIGNATURE] => 
+    [SERVER_SOFTWARE] => Apache
+    [SERVER_NAME] => log
+    [SERVER_ADDR] => 127.0.0.1
+    [SERVER_PORT] => 80
+    [REMOTE_ADDR] => 127.0.0.1
+    [DOCUMENT_ROOT] => D:/dev/log
+    [REQUEST_SCHEME] => http
+    [CONTEXT_PREFIX] => 
+    [CONTEXT_DOCUMENT_ROOT] => D:/dev/log
+    [SERVER_ADMIN] => [no address given]
+    [SCRIPT_FILENAME] => D:/dev/log/index.php
+    [REMOTE_PORT] => 8621
+    [GATEWAY_INTERFACE] => CGI/1.1
+    [SERVER_PROTOCOL] => HTTP/1.1
+    [REQUEST_METHOD] => GET
+    [QUERY_STRING] => 
+    [REQUEST_URI] => /
+    [SCRIPT_NAME] => /index.php
+    [PHP_SELF] => /index.php
+    [REQUEST_TIME_FLOAT] => 1624622823.505
+    [REQUEST_TIME] => 1624622823
+    [argv] => Array
+        (
+        )
+
+    [argc] => 0
+)
+
