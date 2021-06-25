@@ -4,7 +4,7 @@
 *   Class for save log
 */
 
-class toLog {
+class deveLog {
 
     public static function writeLog($fileName, $writeMode, $arData) {
 
