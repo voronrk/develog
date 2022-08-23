@@ -1,0 +1,13 @@
+{
+    "name": "voronrk/develog",
+    "description": "Class for local or remote save log",
+    "type": "library",
+    "license": "Free",
+    "authors": [
+        {
+            "name": "voronrk"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
