@@ -1,5 +1,5 @@
 <?
-require_once('src/develog.php');
+require_once('develog.php');
 
 deveLog::writeLog($_SERVER);
 deveLog::sendLog($_SERVER);
