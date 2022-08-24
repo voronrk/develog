@@ -1,4 +1,7 @@
 <?
+
+namespace Develog;
+
 require_once('develogsettings.php');
 
 /**
@@ -6,7 +9,7 @@ require_once('develogsettings.php');
  * version 2.0
  */
 
-class deveLog {
+class Develog {
 
     /**
      * Write log to current place
