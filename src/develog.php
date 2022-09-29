@@ -11,6 +11,24 @@ require_once('develogsettings.php');
 
 class Develog {
 
+    public $log;
+
+    /**
+     * Add data to log array. $key is key of array
+     *
+     * @param mixed $data
+     * @param string|null $key
+     * @return void
+     */
+    public function add(mixed $data, string $key = null)
+    {
+        if($key) {
+            $this->log[$key] = $data;
+        } else {
+            $this->log[] = $data;
+        };
+    }
+
     /**
      * Write log to current place
      * 
@@ -24,8 +42,12 @@ class Develog {
      * @param string $writeMode
      * @return void
      */
-    public static function writeLog($arData, string $fileName = DEFAULT_LOG_FILENAME_LOCAL, $writeMode = DEFAULT_WRITE_MODE) 
+    public function writeLog($arData = null, string $fileName = DEFAULT_LOG_FILENAME_LOCAL, $writeMode = DEFAULT_WRITE_MODE) 
     {
+        if ($arData == null) {
+            $arData = $this->log;
+        };
+
         switch ($writeMode) {
             case 'a':
                 $writeMode = 'a';
@@ -53,7 +75,7 @@ class Develog {
      * @param string $comment
      * @return void
      */
-    public static function sendLog($arData, string $comment = '') 
+    public function sendLog($arData = null, string $comment = '') 
     {
 
         /*
@@ -61,6 +83,10 @@ class Develog {
         *   $comment - comment about wrining block
         *   $arData - data for loging
         */
+
+        if ($arData == null) {
+            $arData = $this->log;
+        };
 
         $url = LOG_HANDLER;
         $sPostFields = http_build_query([
