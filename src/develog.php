@@ -6,7 +6,7 @@ require_once('develogsettings.php');
 
 /**
  * Class for save log
- * version 2.0
+ * version 3.0
  */
 
 class Develog {
