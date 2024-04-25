@@ -33,33 +33,18 @@ class Develog {
      * Write log to current place
      * 
      * Write log to current folder.
-     * $fileName - name of file
-     * $writeMode - 'a' for append, 'w' for rewrite
      * $arData - data for loging
      *
      * @param mixed $arData
-     * @param string $fileName
-     * @param string $writeMode
      * @return void
      */
-    public function writeLog($arData = null, string $fileName = DEFAULT_LOG_FILENAME_LOCAL, $writeMode = DEFAULT_WRITE_MODE) 
+    public function writeLog($arData = null) 
     {
         if ($arData == null) {
             $arData = $this->log;
         };
 
-        switch ($writeMode) {
-            case 'a':
-                $writeMode = 'a';
-                break;
-            case 'w': 
-                $writeMode = 'w';
-                break;
-            default:
-                $writeMode = DEFAULT_WRITE_MODE;
-        };
-
-        $logfile=fopen($fileName, $writeMode);
+        $logfile = fopen($this->logFileName, $this->writeMode);
         if ($writeMode=='a') {
             fwrite($logfile, '-----------------------------------------------------------------------------' . PHP_EOL);
         };
@@ -104,5 +89,31 @@ class Develog {
 		curl_setopt($obCurl, CURLOPT_POSTFIELDS, $sPostFields);
         $out = curl_exec($obCurl);
         curl_close($obCurl);
+    }
+    
+    /**
+     * Constructor
+     * 
+     * $fileName - name of file
+     * $writeMode - 'a' for append, 'w' for rewrite
+     *
+     * @param string $fileName
+     * @param [type] $writeMode
+     * @return void
+     */
+    public function __construct(string $fileName = DEFAULT_LOG_FILENAME_LOCAL, string $writeMode = DEFAULT_WRITE_MODE)
+    {
+        $this->logFileName = $fileName;
+
+        switch ($writeMode) {
+            case 'a':
+                $this->writeMode = 'a';
+                break;
+            case 'w': 
+                $this->writeMode = 'w';
+                break;
+            default:
+                $this->writeMode = DEFAULT_WRITE_MODE;
+        };
     }
 };
