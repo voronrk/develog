@@ -95,6 +95,53 @@ class Develog {
         $out = curl_exec($obCurl);
         curl_close($obCurl);
     }
+
+    private function logsPack()
+    {
+        $directory = __DIR__ . '/log';
+        $zipFilePath = __DIR__ . '/arclog/' . date('Ymd', strtotime('yesterday')) . '.zip';
+        
+
+        $zip = new ZipArchive();
+        $zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+
+        $files = scandir($directory);
+        foreach ($files as $file) {
+            $filePath = $directory . DIRECTORY_SEPARATOR . $file;
+            if (is_file($filePath) && pathinfo($filePath, PATHINFO_EXTENSION) === EXTENSIONS[$this->format]) {
+                $zip->addFile($filePath, $file);
+            }
+        }
+
+        if ($zip->close()) {
+            foreach ($files as $file) {
+                $filePath = $directory . DIRECTORY_SEPARATOR . $file;
+                if (is_file($filePath) && pathinfo($filePath, PATHINFO_EXTENSION) === EXTENSIONS[$this->format]) {
+                    unlink($filePath);
+                }
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private function checkFirstRun()
+    {
+        $lastRunFile = 'last_run_date.txt';
+        $currentDate = date('Y-m-d');
+
+        if (file_exists($lastRunFile)) {
+            $lastRunDate = file_get_contents($lastRunFile);
+        } else {
+            $lastRunDate = '';
+        }
+
+        if ($currentDate !== $lastRunDate) {
+            $this->logsPack();
+            file_put_contents($lastRunFile, $currentDate);
+        }
+    }
     
     /**
      * Constructor
@@ -108,12 +155,15 @@ class Develog {
      * @param string $writeMode
      * @return void
      */
-    public function __construct(string $fileName = DEFAULT_LOG_FILENAME_LOCAL, string $format = DEFAULT_FORMAT, string $writeMode = DEFAULT_WRITE_MODE)
+    public function __construct(string $fileName = DEFAULT_LOG_FILENAME_LOCAL, string $format = DEFAULT_FORMAT, string $writeMode = DEFAULT_WRITE_MODE, string $logDir = DEFAULT_LOG_DIR, string $arcLogDir = DEFAULT_ARCLOG_DIR)
     {
 
         $this->log = [];
 
-        $this->logFileName = $fileName;
+        $this->arcLogDir = __DIR__ . DIRECTORY_SEPARATOR . $arcLogDir . DIRECTORY_SEPARATOR;
+        $this->logDir = __DIR__ . DIRECTORY_SEPARATOR . $logDir . DIRECTORY_SEPARATOR;
+        // $this->arcLogDir = __DIR__ . DIRECTORY_SEPARATOR . $arcLogDir . DIRECTORY_SEPARATOR;
+        // $this->logDir = __DIR__ . DIRECTORY_SEPARATOR . $logDir . DIRECTORY_SEPARATOR;
 
         switch (strtoupper($format)) {
             case 'JSON':
@@ -125,6 +175,8 @@ class Develog {
             default:
                 $this->format = DEFAULT_FORMAT;
         };
+
+        $this->logFileName = $this->logDir . $fileName . '.' . EXTENSIONS[$this->format];
 
         if($this->format == 'JSON') {
             $this->writeMode = 'w';
@@ -139,6 +191,6 @@ class Develog {
                 default:
                     $this->writeMode = DEFAULT_WRITE_MODE;
             };
-        }        
+        }       
     }
 };

@@ -1,5 +1,5 @@
 <?
-require_once('develog.php');
+include(__DIR__ . '/src/develog.php');
 
 use Develog\Develog;
 
@@ -9,6 +9,8 @@ function debug($data)
     echo print_r($data,true);
     echo "</pre>";
 }
+
+echo __DIR__;
 
 $log = new Develog();
 debug($log);
