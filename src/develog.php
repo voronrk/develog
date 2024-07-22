@@ -1,5 +1,4 @@
 <?
-
 namespace Develog;
 
 require_once('develogsettings.php');
@@ -45,15 +44,18 @@ class Develog {
         if ($arData == null) {
             $arData = $this->log;
         };
-        file_put_contents(str_replace('.log', '.json', $this->logFileName), json_encode($arData, JSON_UNESCAPED_UNICODE));
 
-        // $logfile = fopen($this->logFileName, $this->writeMode);
-        // if ($this->writeMode=='a') {
-        //     fwrite($logfile, '-----------------------------------------------------------------------------' . PHP_EOL);
-        // };
-        // fwrite($logfile, date("Y-m-d H:i:s") . PHP_EOL);
-        // fwrite($logfile, print_r($arData, true) . PHP_EOL);
-        // fclose($logfile);
+        if($this->format == 'JSON') {
+            file_put_contents($this->logFileName . '.json', json_encode($arData, JSON_UNESCAPED_UNICODE));
+        } else {
+            $logfile = fopen($this->logFileName . '.log', $this->writeMode);
+            if ($this->writeMode == 'a') {
+                fwrite($logfile, '-----------------------------------------------------------------------------' . PHP_EOL);
+            };
+            fwrite($logfile, date("Y-m-d H:i:s") . PHP_EOL);
+            fwrite($logfile, print_r($arData, true) . PHP_EOL);
+            fclose($logfile);
+        }
     }
 
     /**
