@@ -11,8 +11,6 @@ require_once('develogsettings.php');
 
 class Develog {
 
-    public $log;
-
     /**
      * Add data to log array. $key is key of array
      *
@@ -20,10 +18,14 @@ class Develog {
      * @param string|null $key
      * @return void
      */
-    public function add(mixed $data, string $key = null)
+    public function add(mixed $data, string $key = null, $isArray = false)
     {
         if($key) {
-            $this->log[$key] = $data;
+            if($isArray) {
+                $this->log[$key][] = $data;
+            } else {
+                $this->log[$key] = $data;
+            }            
         } else {
             $this->log[] = $data;
         };
@@ -43,14 +45,15 @@ class Develog {
         if ($arData == null) {
             $arData = $this->log;
         };
+        file_put_contents(str_replace('.log', '.json', $this->logFileName), json_encode($arData, JSON_UNESCAPED_UNICODE));
 
-        $logfile = fopen($this->logFileName, $this->writeMode);
-        if ($writeMode=='a') {
-            fwrite($logfile, '-----------------------------------------------------------------------------' . PHP_EOL);
-        };
-        fwrite($logfile, date("Y-m-d H:i:s") . PHP_EOL);
-        fwrite($logfile, print_r($arData, true) . PHP_EOL);
-        fclose($logfile);
+        // $logfile = fopen($this->logFileName, $this->writeMode);
+        // if ($this->writeMode=='a') {
+        //     fwrite($logfile, '-----------------------------------------------------------------------------' . PHP_EOL);
+        // };
+        // fwrite($logfile, date("Y-m-d H:i:s") . PHP_EOL);
+        // fwrite($logfile, print_r($arData, true) . PHP_EOL);
+        // fclose($logfile);
     }
 
     /**
@@ -95,25 +98,45 @@ class Develog {
      * Constructor
      * 
      * $fileName - name of file
+     * $format - 'JSON' for json, 'LOG' for txt
      * $writeMode - 'a' for append, 'w' for rewrite
      *
      * @param string $fileName
-     * @param [type] $writeMode
+     * @param string $format
+     * @param string $writeMode
      * @return void
      */
-    public function __construct(string $fileName = DEFAULT_LOG_FILENAME_LOCAL, string $writeMode = DEFAULT_WRITE_MODE)
+    public function __construct(string $fileName = DEFAULT_LOG_FILENAME_LOCAL, string $format = DEFAULT_FORMAT, string $writeMode = DEFAULT_WRITE_MODE)
     {
+
+        $this->log = [];
+
         $this->logFileName = $fileName;
 
-        switch ($writeMode) {
-            case 'a':
-                $this->writeMode = 'a';
+        switch (strtoupper($format)) {
+            case 'JSON':
+                $this->format = 'JSON';
                 break;
-            case 'w': 
-                $this->writeMode = 'w';
+            case 'LOG': 
+                $this->format = 'LOG';
                 break;
             default:
-                $this->writeMode = DEFAULT_WRITE_MODE;
+                $this->format = DEFAULT_FORMAT;
         };
+
+        if($this->format == 'JSON') {
+            $this->writeMode = 'w';
+        } else {
+            switch ($writeMode) {
+                case 'a':
+                    $this->writeMode = 'a';
+                    break;
+                case 'w': 
+                    $this->writeMode = 'w';
+                    break;
+                default:
+                    $this->writeMode = DEFAULT_WRITE_MODE;
+            };
+        }        
     }
 };
