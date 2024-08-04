@@ -1,7 +1,7 @@
 <?
 namespace Develog;
 
-require_once('develogsettings.php');
+include('develogsettings.php');
 
 /**
  * Class for save log
@@ -160,10 +160,10 @@ class Develog {
 
         $this->log = [];
 
-        $this->arcLogDir = __DIR__ . DIRECTORY_SEPARATOR . $arcLogDir . DIRECTORY_SEPARATOR;
-        $this->logDir = __DIR__ . DIRECTORY_SEPARATOR . $logDir . DIRECTORY_SEPARATOR;
         // $this->arcLogDir = __DIR__ . DIRECTORY_SEPARATOR . $arcLogDir . DIRECTORY_SEPARATOR;
         // $this->logDir = __DIR__ . DIRECTORY_SEPARATOR . $logDir . DIRECTORY_SEPARATOR;
+        $this->arcLogDir = $arcLogDir . DIRECTORY_SEPARATOR;
+        $this->logDir = $logDir . DIRECTORY_SEPARATOR;
 
         switch (strtoupper($format)) {
             case 'JSON':
