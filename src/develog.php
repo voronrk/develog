@@ -158,10 +158,10 @@ class Develog {
     public function __construct(string $fileName = DEFAULT_LOG_FILENAME_LOCAL, string $format = DEFAULT_FORMAT, string $writeMode = DEFAULT_WRITE_MODE, string $logDir = DEFAULT_LOG_DIR, string $arcLogDir = DEFAULT_ARCLOG_DIR)
     {
 
+        echo "develog - " . $_SERVER['DOCUMENT_ROOT'] . "<br>";
+
         $this->log = [];
 
-        // $this->arcLogDir = __DIR__ . DIRECTORY_SEPARATOR . $arcLogDir . DIRECTORY_SEPARATOR;
-        // $this->logDir = __DIR__ . DIRECTORY_SEPARATOR . $logDir . DIRECTORY_SEPARATOR;
         $this->arcLogDir = $arcLogDir . DIRECTORY_SEPARATOR;
         $this->logDir = $logDir . DIRECTORY_SEPARATOR;
 

@@ -10,16 +10,14 @@ function debug($data)
     echo "</pre>";
 }
 
-echo __DIR__;
-
 $log = new Develog();
 debug($log);
 
-// $log->add($_SERVER, 'server-1');
-// $log->add($_SERVER, 'server-2');
-// $log->add($_SERVER, 'server-0');
-// $log->add($_SERVER);
-// $log->add($_SERVER, 'server-4');
-// $log->sendLog();
+$log->add($_SERVER, 'server-1');
+$log->add($_SERVER, 'server-2');
+$log->add($_SERVER, 'server-0');
+$log->add($_SERVER);
+$log->add($_SERVER, 'server-4');
+$log->writeLog();
 
 // $log->sendLog($_SERVER, '========================================================');
