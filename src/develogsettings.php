@@ -1,9 +1,7 @@
 <?php
 
-echo "develogsettings - " . $_SERVER['DOCUMENT_ROOT'] . "<br>";
-
-define('DEFAULT_LOG_DIR', $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'logs');
-define('DEFAULT_ARCLOG_DIR', $_SERVER['DOCUMENT_ROOT']  . DIRECTORY_SEPARATOR . 'arclogs');
+define('DEFAULT_LOG_DIR', 'logs');
+define('DEFAULT_ARCLOG_DIR', 'arclogs');
 define('DEFAULT_LOG_FILENAME_LOCAL', date("Y-m-d_H-i-s")); // Default filename for local loging
 define('DEFAULT_WRITE_MODE', 'w'); // Default write mode for log file
 define('DEFAULT_FORMAT', 'JSON'); // Default format of log file

@@ -1,6 +1,8 @@
 <?
 namespace Develog;
 
+use ZipArchive;
+
 include('develogsettings.php');
 
 /**
@@ -17,7 +19,7 @@ class Develog {
      * @param string|null $key
      * @return void
      */
-    public function add(mixed $data, string $key = null, $isArray = false)
+    public function add($data, string $key = null, $isArray = false)
     {
         if($key) {
             if($isArray) {
@@ -158,8 +160,6 @@ class Develog {
     public function __construct(string $fileName = DEFAULT_LOG_FILENAME_LOCAL, string $format = DEFAULT_FORMAT, string $writeMode = DEFAULT_WRITE_MODE, string $logDir = DEFAULT_LOG_DIR, string $arcLogDir = DEFAULT_ARCLOG_DIR)
     {
 
-        echo "develog - " . $_SERVER['DOCUMENT_ROOT'] . "<br>";
-
         $this->log = [];
 
         $this->arcLogDir = $arcLogDir . DIRECTORY_SEPARATOR;
@@ -191,6 +191,8 @@ class Develog {
                 default:
                     $this->writeMode = DEFAULT_WRITE_MODE;
             };
-        }       
+        }  
+		
+		$this->checkFirstRun();
     }
 };
