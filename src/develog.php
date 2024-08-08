@@ -2,12 +2,13 @@
 namespace Develog;
 
 use ZipArchive;
+use DateInterval;
 
 include('develogsettings.php');
 
 /**
  * Class for save log
- * version 3.0
+ * version 4.0
  */
 
 class Develog {
@@ -48,9 +49,9 @@ class Develog {
         };
 
         if($this->format == 'JSON') {
-            file_put_contents($this->logFileName . '.json', json_encode($arData, JSON_UNESCAPED_UNICODE));
+            file_put_contents($this->logFileName, json_encode($arData, JSON_UNESCAPED_UNICODE));
         } else {
-            $logfile = fopen($this->logFileName . '.log', $this->writeMode);
+            $logfile = fopen($this->logFileName, $this->writeMode);
             if ($this->writeMode == 'a') {
                 fwrite($logfile, '-----------------------------------------------------------------------------' . PHP_EOL);
             };
@@ -100,16 +101,14 @@ class Develog {
 
     private function logsPack()
     {
-        $directory = __DIR__ . '/log';
-        $zipFilePath = __DIR__ . '/arclog/' . date('Ymd', strtotime('yesterday')) . '.zip';
-        
+        $zipFilePath = $this->arcLogDir . date('Ymd', strtotime('yesterday')) . '.zip';
 
         $zip = new ZipArchive();
         $zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE);
 
-        $files = scandir($directory);
+        $files = scandir($this->logDir);
         foreach ($files as $file) {
-            $filePath = $directory . DIRECTORY_SEPARATOR . $file;
+            $filePath = $this->logDir . $file;
             if (is_file($filePath) && pathinfo($filePath, PATHINFO_EXTENSION) === EXTENSIONS[$this->format]) {
                 $zip->addFile($filePath, $file);
             }
@@ -117,7 +116,7 @@ class Develog {
 
         if ($zip->close()) {
             foreach ($files as $file) {
-                $filePath = $directory . DIRECTORY_SEPARATOR . $file;
+                $filePath = $this->logDir . $file;
                 if (is_file($filePath) && pathinfo($filePath, PATHINFO_EXTENSION) === EXTENSIONS[$this->format]) {
                     unlink($filePath);
                 }
@@ -141,6 +140,10 @@ class Develog {
 
         if ($currentDate !== $lastRunDate) {
             $this->logsPack();
+			$this->deletingArchiveFilename = $this->arcLogDir . date('Ymd', date_create()->sub(new DateInterval("P" . LOG_RETENTION_PERIOD_DAYS . "D"))->getTimestamp()) . '.zip';
+			if(file_exists($this->deletingArchiveFilename)) {
+                unlink($this->deletingArchiveFilename);
+            }
             file_put_contents($lastRunFile, $currentDate);
         }
     }
@@ -161,9 +164,8 @@ class Develog {
     {
 
         $this->log = [];
-
-        $this->arcLogDir = $arcLogDir . DIRECTORY_SEPARATOR;
-        $this->logDir = $logDir . DIRECTORY_SEPARATOR;
+		$this->logDir = $logDir . DIRECTORY_SEPARATOR;
+		$this->arcLogDir = $arcLogDir . DIRECTORY_SEPARATOR;
 
         switch (strtoupper($format)) {
             case 'JSON':

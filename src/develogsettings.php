@@ -10,6 +10,7 @@ define('EXTENSIONS', [
     'JSON' => 'json',
     'LOG' => 'log',
 ]);
+define('LOG_RETENTION_PERIOD_DAYS', 2);
 
 define('LOG_FILENAME_REMOTE', date("Y-m-d H:i:s") . '.log'); // Filename for remote loging
 define('LOG_HANDLER', 'https://kibra24.ru/b24/logs/writelog.php'); // URL of remote log handler
