@@ -22,6 +22,14 @@ class Develog {
      */
     public function add($data, string $key = null, $isArray = false)
     {
+        if(IS_DEV) {
+            if($key) {
+                echo '===================== ' . $key . ' =======================<br>';
+            }
+            echo "<pre>";
+            echo print_r($data,true);
+            echo "</pre>";
+        }
         if($key) {
             if($isArray) {
                 $this->log[$key][] = $data;
@@ -31,6 +39,9 @@ class Develog {
         } else {
             $this->log[] = $data;
         };
+		$tmplog = $this->log;
+        $tmplog[] = 'Something wrong!';
+        $this->writeLog($tmplog);
     }
 
     /**
@@ -103,31 +114,40 @@ class Develog {
     {
         $zipFilePath = $this->arcLogDir . date('Ymd', strtotime('yesterday')) . '.zip';
 
-        $zip = new ZipArchive();
-        $zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE);
-
         $files = scandir($this->logDir);
-        foreach ($files as $file) {
-            $filePath = $this->logDir . $file;
-            if (is_file($filePath) && pathinfo($filePath, PATHINFO_EXTENSION) === EXTENSIONS[$this->format]) {
-                $zip->addFile($filePath, $file);
-            }
-        }
 
-        if ($zip->close()) {
+        if($files && (count($files) > 0)) {
+
+            $zip = new ZipArchive();
+            $zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+
+            $isFilesPresent = false;
+            
             foreach ($files as $file) {
                 $filePath = $this->logDir . $file;
                 if (is_file($filePath) && pathinfo($filePath, PATHINFO_EXTENSION) === EXTENSIONS[$this->format]) {
-                    unlink($filePath);
+                    $zip->addFile($filePath, $file);
+                    $isFilesPresent = true;
                 }
             }
-            return true;
+
+            if ($isFilesPresent && $zip->close()) {
+                foreach ($files as $file) {
+                    $filePath = $this->logDir . $file;
+                    if (is_file($filePath) && pathinfo($filePath, PATHINFO_EXTENSION) === EXTENSIONS[$this->format]) {
+                        unlink($filePath);
+                    }
+                }
+                return true;
+            } else {
+                return false;
+            }
         } else {
-            return false;
-        }
+            return true;
+        }        
     }
 
-    private function checkFirstRun()
+    private function checkFirstRun_DEPRECATED()
     {
         $lastRunFile = 'last_run_date.txt';
         $currentDate = date('Y-m-d');
@@ -147,6 +167,43 @@ class Develog {
             file_put_contents($lastRunFile, $currentDate);
         }
     }
+
+    private function checkFirstRun()
+{
+    $lastRunFile = 'last_run_date.txt';
+    $currentDate = date('Y-m-d');
+
+    $fileHandle = fopen($lastRunFile, 'c+');
+    if (!$fileHandle) {
+        throw new RuntimeException("Не удалось открыть файл: $lastRunFile");
+    }
+
+    try {
+        if (!flock($fileHandle, LOCK_EX)) {
+            throw new RuntimeException("Не удалось заблокировать файл: $lastRunFile");
+        }
+
+        rewind($fileHandle); // Перемещаем указатель в начало файла
+        $lastRunDate = trim(stream_get_contents($fileHandle)) ? : '';
+
+        if ($currentDate !== $lastRunDate) {
+            $this->logsPack();
+
+            $this->deletingArchiveFilename = $this->arcLogDir . date('Ymd', date_create()->sub(new DateInterval("P" . LOG_RETENTION_PERIOD_DAYS . "D"))->getTimestamp()) . '.zip';
+            if (file_exists($this->deletingArchiveFilename)) {
+                unlink($this->deletingArchiveFilename);
+            }
+
+            ftruncate($fileHandle, 0);
+            rewind($fileHandle);
+
+            fwrite($fileHandle, $currentDate);
+        }
+    } finally {
+        flock($fileHandle, LOCK_UN);
+        fclose($fileHandle);
+    }
+}
     
     /**
      * Constructor
