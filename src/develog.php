@@ -60,7 +60,7 @@ class Develog {
         };
 
         if($this->format == 'JSON') {
-            file_put_contents($this->logFileName, json_encode($arData, JSON_UNESCAPED_UNICODE));
+            file_put_contents($this->logFileName, json_encode($arData, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
         } else {
             $logfile = fopen($this->logFileName, $this->writeMode);
             if ($this->writeMode == 'a') {
